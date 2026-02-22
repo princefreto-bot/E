@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Test - Nano Banana</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: system-ui, sans-serif;
+            padding: 20px;
+        }
+        .test-item {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .test-item.success {
+            border-color: #22c55e;
+            background: rgba(34,197,94,0.1);
+        }
+        .test-item.error {
+            border-color: #ef4444;
+            background: rgba(239,68,68,0.1);
+        }
+        .test-item img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            background: #2a2a2a;
+        }
+        h1 { color: #fbbf24; }
+        h2 { color: #888; margin-top: 30px; }
+        .path { font-size: 11px; color: #666; word-break: break-all; max-width: 200px; }
+        .status { font-weight: bold; margin-top: 5px; }
+        .success .status { color: #22c55e; }
+        .error .status { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <h1>🍌 Nano Banana - Image Test</h1>
+    <p>Testing different file path formats to find which one works...</p>
+    <p><strong>If you see a GREEN box with ✅, that format works!</strong></p>
+    
+    <h2>Testing: /images/tropical/ folder</h2>
+    <div id="results"></div>
+
+    <h2 style="margin-top:40px;">Manual Test</h2>
+    <p>Enter your own path to test:</p>
+    <input type="text" id="customPath" value="/images/tropical/1 (1).gif" style="width:400px;padding:8px;background:#333;color:white;border:1px solid #555;border-radius:4px;">
+    <button onclick="testCustom()" style="padding:8px 16px;background:#fbbf24;color:black;border:none;border-radius:4px;cursor:pointer;">Test</button>
+    <div id="customResult" style="margin-top:10px;"></div>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        // Different path formats to test
+        const formats = [
+            { name: 'Espaces normaux', path: '/images/tropical/1 (1).gif' },
+            { name: 'Space %20 only', path: '/images/tropical/1%20(1).gif' },
+            { name: 'All URL encoded', path: '/images/tropical/1%20%281%29.gif' },
+            { name: 'Frame 191 encoded', path: '/images/tropical/1%20%28191%29.gif' },
+            { name: 'Plus sign', path: '/images/tropical/1+(1).gif' },
+            { name: 'No space', path: '/images/tropical/1(1).gif' },
+            { name: 'Underscore', path: '/images/tropical/1_(1).gif' },
+            { name: 'Dash', path: '/images/tropical/1-(1).gif' },
+        ];
+
+        formats.forEach(format => {
+            const div = document.createElement('div');
+            div.className = 'test-item';
+            div.innerHTML = `
+                <img src="${format.path}" alt="${format.name}">
+                <br>
+                <strong>${format.name}</strong>
+                <p class="path">${format.path}</p>
+                <p class="status">Loading...</p>
+            `;
+            
+            const img = div.querySelector('img');
+            const status = div.querySelector('.status');
+            
+            img.onload = () => {
+                div.classList.add('success');
+                status.textContent = '✅ SUCCESS';
+            };
+            img.onerror = () => {
+                div.classList.add('error');
+                status.textContent = '❌ FAILED';
+            };
+            
+            results.appendChild(div);
+        });
+
+        function testCustom() {
+            const path = document.getElementById('customPath').value;
+            const result = document.getElementById('customResult');
+            result.innerHTML = '<img id="customImg" style="max-width:200px;max-height:200px;background:#333;">';
+            const img = document.getElementById('customImg');
+            img.onload = () => result.innerHTML += '<p style="color:#22c55e;font-weight:bold;">✅ Image loaded successfully!</p>';
+            img.onerror = () => result.innerHTML += '<p style="color:#ef4444;font-weight:bold;">❌ Failed to load image</p>';
+            img.src = path;
+        }
+    </script>
+</body>
+</html>
