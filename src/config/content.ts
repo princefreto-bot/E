@@ -21,13 +21,13 @@
 export const SITE_CONFIG = {
   // Nom de la marque (affiché dans la navbar et le footer)
   brandName: "Nano Banana",
-
+  
   // Slogan principal
   tagline: "Premium Craft Juices",
-
+  
   // Description pour le SEO
   description: "Découvrez nos jus artisanaux premium aux saveurs uniques",
-
+  
   // Nombre total de frames dans chaque séquence d'images
   totalFrames: 191,
 };
@@ -57,41 +57,41 @@ export type Product = ProductConfig;
 export interface ProductConfig {
   // Identifiant unique (utilisé pour le dossier des images)
   id: string;
-
+  
   // Nom affiché du produit
   name: string;
-
+  
   // Sous-titre du produit
   subtitle: string;
-
+  
   // Description courte
   description: string;
-
+  
   // Prix (format: "$X.XX")
   price: string;
-
+  
   // Couleurs du thème (dégradé)
   colors: {
     from: string;  // Couleur de départ du dégradé
     to: string;    // Couleur de fin du dégradé
   };
-
+  
   // Chemin vers le dossier des images (dans /public)
   imagePath: string;
-
+  
   // Direction de lecture des frames
   // "forward" = 1→191 | "reverse" = 191→1
   frameDirection: "forward" | "reverse";
 
   // Nombre de frames (optionnel, défaut 191)
   frameCount?: number;
-
+  
   // Textes affichés pendant le scroll (4 sections)
   scrollTexts: {
     headline: string;    // Titre principal
     subheadline: string; // Sous-titre
   }[];
-
+  
   // Caractéristiques du produit (affichées dans la section d'achat)
   features: {
     label: string;  // Nom de la caractéristique
@@ -109,19 +109,19 @@ export const PRODUCTS: ProductConfig[] = [
     subtitle: "Tropical Paradise",
     description: "Un voyage exotique avec des mangues mûries au soleil, mélangées à une touche d'agrumes pour une explosion de fraîcheur tropicale.",
     price: "$4.99",
-
+    
     // Thème jaune-orange riche
     colors: {
       from: "#fbbf24",  // Amber 400
       to: "#ea580c",    // Orange 600
     },
-
+    
     // Chemin des images
     imagePath: "/images/mango",
-
+    
     // Direction: 191 → 1 (reverse)
     frameDirection: "reverse",
-
+    
     // Textes pendant le scroll
     scrollTexts: [
       {
@@ -141,7 +141,7 @@ export const PRODUCTS: ProductConfig[] = [
         subheadline: "Une expérience gustative unique",
       },
     ],
-
+    
     // Caractéristiques
     features: [
       { label: "Volume", value: "350ml" },
@@ -150,7 +150,7 @@ export const PRODUCTS: ProductConfig[] = [
       { label: "Origine", value: "Inde" },
     ],
   },
-
+  
   // -------------------------------------------------
   // PRODUIT 2 : CHOCOLATE BLISS
   // -------------------------------------------------
@@ -160,19 +160,19 @@ export const PRODUCTS: ProductConfig[] = [
     subtitle: "Indulgence Absolue",
     description: "Une boisson chocolatée onctueuse préparée avec du cacao brut et une touche de banane pour une douceur irrésistible.",
     price: "$5.49",
-
+    
     // Thème NOIR PROFOND / MARRON GLACÉ
     colors: {
       from: "#3f2212",  // Marron très foncé
       to: "#0f0502",    // Presque noir
     },
-
+    
     // Chemin des images
     imagePath: "/images/chocolate",
-
+    
     // Direction: 1 → 191 (forward)
     frameDirection: "forward",
-
+    
     // Textes pendant le scroll
     scrollTexts: [
       {
@@ -192,7 +192,7 @@ export const PRODUCTS: ProductConfig[] = [
         subheadline: "Sans culpabilité",
       },
     ],
-
+    
     // Caractéristiques
     features: [
       { label: "Volume", value: "350ml" },
@@ -201,7 +201,7 @@ export const PRODUCTS: ProductConfig[] = [
       { label: "Origine", value: "Ghana" },
     ],
   },
-
+  
   // -------------------------------------------------
   // PRODUIT 3 : POMEGRANATE POWER
   // -------------------------------------------------
@@ -211,19 +211,19 @@ export const PRODUCTS: ProductConfig[] = [
     subtitle: "Antioxydant Suprême",
     description: "Le pouvoir des grenades fraîchement pressées, riches en antioxydants pour une vitalité incomparable.",
     price: "$5.99",
-
+    
     // Thème ROUGE RUBIS / BORDEAUX
     colors: {
       from: "#be123c",  // Rose 700
       to: "#4c0519",    // Rose 950 (Très sombre)
     },
-
+    
     // Chemin des images
     imagePath: "/images/pomegranate",
-
-    // Direction: 1 → 191 (forward)
-    frameDirection: "forward",
-
+    
+    // Direction: 191 → 1 (reverse)
+    frameDirection: "reverse",
+    
     // Textes pendant le scroll
     scrollTexts: [
       {
@@ -243,7 +243,7 @@ export const PRODUCTS: ProductConfig[] = [
         subheadline: "Saveur authentique et puissante",
       },
     ],
-
+    
     // Caractéristiques
     features: [
       { label: "Volume", value: "350ml" },
@@ -266,10 +266,10 @@ export const NAVBAR_CONFIG = {
     { label: "À Propos", href: "#about" },
     { label: "Contact", href: "#contact" },
   ],
-
+  
   // Texte du bouton principal
   ctaButtonText: "Commander",
-
+  
   // URL du bouton principal
   ctaButtonUrl: "#order",
 };
@@ -282,7 +282,7 @@ export const NAVBAR_CONFIG = {
 export const FOOTER_CONFIG = {
   // Description de la marque
   brandDescription: "Jus artisanaux premium préparés avec des ingrédients naturels soigneusement sélectionnés.",
-
+  
   // Colonnes de liens
   columns: [
     {
@@ -304,7 +304,7 @@ export const FOOTER_CONFIG = {
       ],
     },
   ],
-
+  
   // Configuration de la newsletter
   newsletter: {
     title: "Newsletter",
@@ -312,10 +312,10 @@ export const FOOTER_CONFIG = {
     placeholder: "Votre email",
     buttonText: "S'inscrire",
   },
-
+  
   // Texte de copyright (l'année est ajoutée automatiquement)
   copyrightText: "Nano Banana. Tous droits réservés.",
-
+  
   // Liens des réseaux sociaux
   socialLinks: [
     { name: "Instagram", url: "https://instagram.com" },

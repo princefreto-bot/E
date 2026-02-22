@@ -1,17 +1,19 @@
 import { motion } from 'framer-motion';
 import { FOOTER_CONFIG, SITE_CONFIG } from '../config/content';
 
-/**
- * Pied de page premium avec newsletter et liens
- */
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="relative bg-gray-950 text-white py-24 px-6 overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-amber-500/10 to-transparent blur-[100px]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           {/* Brand Column */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
@@ -38,11 +40,13 @@ export default function Footer() {
                   </defs>
                 </svg>
               </div>
-              <span className="text-xl font-bold">{SITE_CONFIG.brandName}</span>
+              <span className="text-xl font-black">{SITE_CONFIG.brandName}</span>
             </div>
-            <p className="text-gray-400 leading-relaxed mb-6">
+            <p className="text-gray-400 leading-relaxed mb-8">
               {FOOTER_CONFIG.brandDescription}
             </p>
+            
+            {/* Social Links */}
             <div className="flex gap-4">
               {FOOTER_CONFIG.socialLinks.map((social) => (
                 <motion.a
@@ -50,8 +54,9 @@ export default function Footer() {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  whileHover={{ scale: 1.1, y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-amber-500/50 transition-all"
                 >
                   <SocialIcon name={social.name.toLowerCase()} />
                 </motion.a>
@@ -63,16 +68,20 @@ export default function Footer() {
           {FOOTER_CONFIG.columns.map((column, index) => (
             <motion.div
               key={column.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
             >
-              <h4 className="text-lg font-semibold mb-6">{column.title}</h4>
-              <ul className="space-y-3">
+              <h4 className="text-lg font-bold mb-6 text-white">{column.title}</h4>
+              <ul className="space-y-4">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="text-gray-400 hover:text-white transition-colors">
+                    <a 
+                      href={link.href} 
+                      className="text-gray-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2 group"
+                    >
+                      <span className="w-0 group-hover:w-2 h-0.5 bg-amber-400 transition-all duration-300" />
                       {link.label}
                     </a>
                   </li>
@@ -83,26 +92,28 @@ export default function Footer() {
 
           {/* Newsletter Column */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <h4 className="text-lg font-semibold mb-6">{FOOTER_CONFIG.newsletter.title}</h4>
-            <p className="text-gray-400 mb-4">
+            <h4 className="text-lg font-bold mb-6 text-white">{FOOTER_CONFIG.newsletter.title}</h4>
+            <p className="text-gray-400 mb-6">
               {FOOTER_CONFIG.newsletter.description}
             </p>
             <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder={FOOTER_CONFIG.newsletter.placeholder}
-                className="px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500 transition-colors"
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder={FOOTER_CONFIG.newsletter.placeholder}
+                  className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:bg-white/10 transition-all"
+                />
+              </div>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="px-6 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 font-semibold text-white hover:from-amber-400 hover:to-orange-400 transition-all"
+                className="px-6 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 font-bold text-white hover:from-amber-400 hover:to-orange-400 transition-all shadow-lg shadow-amber-500/25"
               >
                 {FOOTER_CONFIG.newsletter.buttonText}
               </motion.button>
@@ -111,16 +122,22 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <motion.div 
+          className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} {FOOTER_CONFIG.copyrightText}
           </p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Politique de confidentialité</a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Conditions d'utilisation</a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Accessibilité</a>
+          <div className="flex gap-8 text-sm">
+            <a href="#" className="text-gray-500 hover:text-amber-400 transition-colors">Confidentialité</a>
+            <a href="#" className="text-gray-500 hover:text-amber-400 transition-colors">Conditions</a>
+            <a href="#" className="text-gray-500 hover:text-amber-400 transition-colors">Accessibilité</a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

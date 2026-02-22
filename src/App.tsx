@@ -15,13 +15,11 @@ function App() {
   const [direction, setDirection] = useState(0);
   const [showIntro, setShowIntro] = useState(true);
   
-  // Re-enabled Preloader to ensure frames are ready
   const { progress, isLoaded } = usePreloadImages();
 
   const product = PRODUCTS[currentIndex];
 
   useEffect(() => {
-    // Dismiss intro only when fully loaded
     if (isLoaded && progress === 100) {
       const timer = setTimeout(() => {
         setShowIntro(false);
@@ -41,26 +39,30 @@ function App() {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentIndex]);
 
   const pageVariants = {
-    initial: (direction: number) => ({
+    initial: (dir: number) => ({
       opacity: 0,
-      x: direction > 0 ? 100 : -100,
+      x: dir > 0 ? 100 : -100,
+      scale: 0.98,
     }),
     animate: {
       opacity: 1,
       x: 0,
+      scale: 1,
     },
-    exit: (direction: number) => ({
+    exit: (dir: number) => ({
       opacity: 0,
-      x: direction < 0 ? 100 : -100,
+      x: dir < 0 ? 100 : -100,
+      scale: 0.98,
     }),
   };
 
   return (
     <>
+      {/* Intro Overlay */}
       <AnimatePresence>
         {showIntro && (
           <IntroOverlay 
@@ -70,12 +72,43 @@ function App() {
         )}
       </AnimatePresence>
 
+      {/* Main App */}
       <div
-        className="relative min-h-screen transition-colors duration-1000 ease-in-out selection:bg-white/30 selection:text-white"
+        className="relative min-h-screen transition-all duration-1000 ease-out grain"
         style={{
-          background: `linear-gradient(to bottom, ${product.colors.from}, ${product.colors.to})`,
+          background: `linear-gradient(135deg, ${product.colors.from} 0%, ${product.colors.to} 50%, ${product.colors.from}88 100%)`,
         }}
       >
+        {/* Animated Background Orbs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <motion.div
+            className="absolute w-[600px] h-[600px] rounded-full blur-[150px] opacity-30"
+            style={{ background: product.colors.from }}
+            animate={{
+              x: [0, 100, -50, 0],
+              y: [0, -100, 50, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute right-0 bottom-0 w-[500px] h-[500px] rounded-full blur-[120px] opacity-20"
+            style={{ background: product.colors.to }}
+            animate={{
+              x: [0, -80, 40, 0],
+              y: [0, 80, -40, 0],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+
         <Navbar />
 
         <main className="relative z-10">
@@ -87,56 +120,92 @@ function App() {
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ 
+                duration: 0.8, 
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="w-full"
             >
-              {/* Scrollytelling section managed by ProductBottleScroll (handles its own 500vh + sticky canvas) */}
+              {/* Hero Scroll Animation */}
               <ProductBottleScroll product={product} />
 
+              {/* Product Details */}
               <ProductDetails product={product} />
               
+              {/* Buy Section */}
               <BuySection 
                 product={product} 
                 onNextFlavor={nextProduct}
               />
 
+              {/* Footer */}
               <Footer />
             </motion.div>
           </AnimatePresence>
         </main>
 
-        <div className="fixed bottom-8 left-0 right-0 z-50 flex items-center justify-center gap-8 pointer-events-none">
-          <button
+        {/* Navigation Controls */}
+        <motion.div 
+          className="fixed bottom-8 left-0 right-0 z-50 flex items-center justify-center gap-6 pointer-events-none"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          {/* Previous Button */}
+          <motion.button
             onClick={prevProduct}
-            className="pointer-events-auto p-4 rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-95 border border-white/10"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="pointer-events-auto p-4 rounded-full glass-dark text-white hover:bg-white/20 transition-all border border-white/20 shadow-xl"
           >
             <ChevronLeft size={24} />
-          </button>
+          </motion.button>
 
-          <div className="pointer-events-auto flex items-center gap-2 px-6 py-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10">
+          {/* Flavor Pills */}
+          <div className="pointer-events-auto flex items-center gap-2 px-6 py-3 rounded-full glass-dark border border-white/20 shadow-xl">
             {PRODUCTS.map((p, idx) => (
-              <button
+              <motion.button
                 key={p.id}
                 onClick={() => {
                   setDirection(idx > currentIndex ? 1 : -1);
                   setCurrentIndex(idx);
                 }}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  idx === currentIndex
-                    ? "bg-white w-8"
-                    : "bg-white/30 hover:bg-white/60"
-                }`}
-              />
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+                className="relative group"
+              >
+                <motion.div
+                  className={`rounded-full transition-all duration-500 ${
+                    idx === currentIndex
+                      ? "w-10 h-3"
+                      : "w-3 h-3 hover:scale-125"
+                  }`}
+                  style={{
+                    background: idx === currentIndex 
+                      ? `linear-gradient(90deg, ${p.colors.from}, ${p.colors.to})`
+                      : 'rgba(255,255,255,0.3)',
+                  }}
+                  layoutId={idx === currentIndex ? "activePill" : undefined}
+                />
+                
+                {/* Tooltip */}
+                <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/80 text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  {p.name}
+                </span>
+              </motion.button>
             ))}
           </div>
 
-          <button
+          {/* Next Button */}
+          <motion.button
             onClick={nextProduct}
-            className="pointer-events-auto p-4 rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-95 border border-white/10"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="pointer-events-auto p-4 rounded-full glass-dark text-white hover:bg-white/20 transition-all border border-white/20 shadow-xl"
           >
             <ChevronRight size={24} />
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </>
   );
