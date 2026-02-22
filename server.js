@@ -24,8 +24,9 @@ app.use('/images', express.static(join(__dirname, 'public/images'), {
   etag: true,
 }));
 
-// SPA fallback - serve index.html for all routes
-app.get('*', (req, res) => {
+// SPA fallback - serve index.html for all non-static routes
+// Using middleware instead of wildcard route (Express 5 compatible)
+app.use((req, res) => {
   res.sendFile(join(__dirname, 'dist', 'index.html'));
 });
 
